@@ -28,7 +28,7 @@
             <div class="login-panel-top"><span class="login-demo-label">${copy('PRÄSENTATIONSZUGANG', 'PRESENTATION ACCESS')}</span><select id="login-language" aria-label="${copy('Sprache wählen', 'Choose language')}"><option value="de">Deutsch</option><option value="en">English</option><option value="easy">Leichte Sprache</option></select></div>
             <div class="login-form-wrap"><div class="login-symbol" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="7" y="14" width="18" height="14" rx="3"/><path d="M11 14V9a5 5 0 0 1 10 0v5M16 20v3"/></svg></div><p class="eyebrow">ONLINE COLLECTION</p><h2>${copy('Schön, dass Sie da sind.', 'Welcome to the collection.', 'Willkommen!')}</h2><p class="login-intro">${copy('Melden Sie sich an und entdecken Sie die Sammlungen der Lübecker Museen.', 'Sign in to explore the collections of Lübeck’s museums.', 'Melde dich an. Dann kannst du die Bilder ansehen.')}</p>
               <form id="demo-login" autocomplete="off"><label for="login-user">${copy('Benutzername', 'Username')}</label><input id="login-user" name="username" autocomplete="off" autocapitalize="none" spellcheck="false" required placeholder="${copy('Ihr Benutzername', 'Your username')}"><div class="login-password-label"><label for="login-password">${copy('Passwort', 'Password')}</label><button type="button" data-auth="help">${copy('Zugangsdaten?', 'Access details?')}</button></div><div class="login-password"><input id="login-password" name="password" type="password" autocomplete="off" required placeholder="${copy('Ihr Passwort', 'Your password')}"><button type="button" data-auth="reveal" aria-label="${copy('Passwort anzeigen', 'Show password')}" aria-pressed="false">${eye}</button></div><p id="login-error" class="login-error" role="alert" hidden></p><button class="login-submit" type="submit">${copy('Sammlung betreten', 'Enter the collection', 'Anmelden')}</button></form>
-              <div class="login-demo-note"><strong>${copy('Ein Zugang zum Ausprobieren', 'A login to try it out')}</strong><p>${copy('Demo-Anmeldung ohne echten Zugangsschutz. Bitte keine persönlichen Passwörter verwenden.', 'Demonstration only, without real access protection. Please do not use personal passwords.')}</p><button type="button" data-auth="fill">${copy('Demozugang einsetzen', 'Fill demo credentials')}</button><div id="login-help" hidden><span>${copy('Benutzer', 'User')}: <code>gast</code></span><span>${copy('Passwort', 'Password')}: <code>sammlung2026</code></span></div></div>
+              <div id="login-help" hidden><span>${copy('Benutzer', 'User')}: <code>gast</code></span><span>${copy('Passwort', 'Password')}: <code>sammlung2026</code></span></div>
             </div><div class="login-panel-bottom"><span>${copy('Lübecker Museen · Gestaltungsvorschlag', 'Lübeck Museums · Design proposal')}</span><span>${copy('Keine Registrierung erforderlich', 'No registration required')}</span></div>
           </section>
         </div>`;
@@ -72,12 +72,6 @@
     if (!button) return;
     if (button.dataset.auth === 'logout') { window.OC_AUTH.logout(); return; }
     const password = document.getElementById('login-password');
-    if (button.dataset.auth === 'fill') {
-      document.getElementById('login-user').value = 'gast'; password.value = 'sammlung2026';
-      document.getElementById('login-error').hidden = true;
-      document.getElementById('login-user').removeAttribute('aria-invalid'); password.removeAttribute('aria-invalid');
-      document.querySelector('.login-submit').focus();
-    }
     if (button.dataset.auth === 'help') document.getElementById('login-help').hidden = !document.getElementById('login-help').hidden;
     if (button.dataset.auth === 'reveal') {
       const reveal = password.type === 'password'; password.type = reveal ? 'text' : 'password';
