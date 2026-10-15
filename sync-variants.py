@@ -15,4 +15,7 @@ for design in ('b', 'c'):
     html = html.replace('</head>', f'<link rel="stylesheet" href="../variants.css?v={version("variants.css")}"></head>')
     html = html.replace('<script src="../app.js', f'<script src="../variant-bootstrap.js?v={version("variant-bootstrap.js")}"></script><script src="../app.js')
     html = html.replace('</body>', f'<script src="../variants.js?v={version("variants.js")}"></script></body>')
+    if design == 'b' and (root / 'b/gallery.js').exists():
+        html = html.replace('</head>', f'<link rel="stylesheet" href="gallery.css?v={version("b/gallery.css")}"></head>')
+        html = html.replace('</body>', f'<script src="gallery.js?v={version("b/gallery.js")}"></script></body>')
     (root / design / 'index.html').write_text(html)

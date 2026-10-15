@@ -29,3 +29,7 @@ Benutzername: `gast` · Passwort: `sammlung2026`. Der Login dient ausschließlic
 Alle drei verwenden dieselben Dateien `data.js`, `app.js`, `auth.js` und dieselben Bilder. B und C ergänzen ausschließlich Darstellungsregeln und alternative Einstiegsseiten über `variants.css` und `variants.js`. Die Links innerhalb einer Variante behalten deren Pfad bei; auch Direktlinks, Merkliste und Teilen funktionieren dort. Demo-Zugangsdaten gelten für alle Varianten; Anmeldestatus und Merkliste werden auf derselben Domain gemeinsam genutzt.
 
 Nach Änderungen an gemeinsamen Dateien `python3 sync-variants.py` ausführen. Dies aktualisiert die versionierten Dateiverweise für B und C, ohne die Startseite von A zu verändern.
+
+### Eigenständige Galerie B
+
+Variante B ergänzt mit `b/gallery.js` und `b/gallery.css` eigene Seitenkompositionen für Start, Sammlung mit einklappbaren Filtern, Werkansicht mit großem Bildraum und Informationsdossiers, Geschichtenübersicht, Ausstellungsrundgänge, Merkliste sowie eine vertikale Zeitreise nach Jahrhunderten. Navigation und Anmeldung sind ebenfalls eigenständig gestaltet. Die bestehenden Objekt- und Themendaten sowie Such-, Merk-, Export- und Dialogaktionen werden weiterverwendet. A und C laden diese Dateien nicht.
