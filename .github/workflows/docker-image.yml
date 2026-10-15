@@ -10,7 +10,7 @@ on:
       - 'assets/**'
       - 'Dockerfile'
       - '.dockerignore'
-      - 'deployment/Caddyfile.internal'
+      - 'deployment/nginx.conf'
       - '.github/workflows/docker-image.yml'
   workflow_dispatch:
 
@@ -55,6 +55,8 @@ jobs:
             --read-only --tmpfs /tmp:uid=10001,gid=10001,mode=1777 \
             --cap-drop ALL --security-opt no-new-privileges:true \
             -p 127.0.0.1:8088:8080 "${IMAGE}:${GITHUB_SHA}"
+          docker exec collection-check nginx -t
+          docker exec collection-check sh -c '! command -v caddy'
           healthy=false
           for attempt in {1..30}; do
             if [ "$(docker inspect --format '{{.State.Health.Status}}' collection-check)" = healthy ]; then
