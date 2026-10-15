@@ -1,4 +1,6 @@
 FROM caddy:2-alpine
+# Port 8080 does not need file capabilities; allow cap_drop ALL at runtime.
+RUN setcap -r /usr/bin/caddy
 COPY deployment/Caddyfile.internal /etc/caddy/Caddyfile
 COPY *.html *.js *.css /srv/
 COPY assets/ /srv/assets/
