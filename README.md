@@ -19,3 +19,13 @@ Die Originalanlagen und internen Hosting-Dateien sind nicht Teil dieser Veröffe
 ## Demo-Anmeldung
 
 Benutzername: `gast` · Passwort: `sammlung2026`. Der Login dient ausschließlich der Präsentation und bietet keinen Zugriffsschutz. Alle Dateien bleiben öffentlich. Der Anmeldestatus gilt für die aktuelle Browsersitzung; Abmelden beendet ihn. Keine echten Passwörter eingeben.
+
+## Drei Designvarianten
+
+- A: `/` – ursprünglicher Entwurf, unverändert.
+- B: `/b/` – Die digitale Galerie: ruhige Gestaltung, große Werke, Serifenschrift.
+- C: `/c/` – Das entdeckende Museum: Fragen, Bildcollagen und Verbindungen als Einstieg.
+
+Alle drei verwenden dieselben Dateien `data.js`, `app.js`, `auth.js` und dieselben Bilder. B und C ergänzen ausschließlich Darstellungsregeln und alternative Einstiegsseiten über `variants.css` und `variants.js`. Die Links innerhalb einer Variante behalten deren Pfad bei; auch Direktlinks, Merkliste und Teilen funktionieren dort. Demo-Zugangsdaten gelten für alle Varianten; Anmeldestatus und Merkliste werden auf derselben Domain gemeinsam genutzt.
+
+Nach Änderungen an gemeinsamen Dateien `python3 sync-variants.py` ausführen. Dies aktualisiert die versionierten Dateiverweise für B und C, ohne die Startseite von A zu verändern.
