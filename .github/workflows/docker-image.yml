@@ -1,0 +1,93 @@
+name: Docker-Image bauen und veröffentlichen
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/*.html'
+      - '**/*.js'
+      - '**/*.css'
+      - 'assets/**'
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'deployment/Caddyfile.internal'
+      - '.github/workflows/docker-image.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-image-main
+  cancel-in-progress: false
+
+jobs:
+  build-test-publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Website laden
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Image-Namen festlegen
+        shell: bash
+        run: |
+          echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+
+      - name: Docker-Image bauen
+        run: |
+          docker build --pull \
+            --label "org.opencontainers.image.source=https://github.com/${GITHUB_REPOSITORY}" \
+            --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
+            --tag "${IMAGE}:${GITHUB_SHA}" .
+
+      - name: Container und alle drei Varianten prüfen
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run -d --name collection-check \
+            --read-only --tmpfs /tmp:uid=10001,gid=10001,mode=1777 \
+            --cap-drop ALL --security-opt no-new-privileges:true \
+            -p 127.0.0.1:8088:8080 "${IMAGE}:${GITHUB_SHA}"
+          healthy=false
+          for attempt in {1..30}; do
+            if [ "$(docker inspect --format '{{.State.Health.Status}}' collection-check)" = healthy ]; then
+              healthy=true
+              break
+            fi
+            sleep 2
+          done
+          if [ "$healthy" != true ]; then
+            docker logs collection-check
+            exit 1
+          fi
+          for route in / /b/ /c/ /app.js /data.js /b/gallery.js /c/discovery.js /assets/object-01.jpg; do
+            curl --fail --silent --show-error "http://127.0.0.1:8088${route}" -o /tmp/collection-response
+            test -s /tmp/collection-response
+          done
+          code=$(curl --silent -o /dev/null -w '%{http_code}' http://127.0.0.1:8088/README.md)
+          test "$code" = 404
+
+      - name: Bei GitHub Container Registry anmelden
+        env:
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "$REGISTRY_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+
+      - name: Geprüftes Image veröffentlichen
+        run: |
+          docker push "${IMAGE}:${GITHUB_SHA}"
+          docker tag "${IMAGE}:${GITHUB_SHA}" "${IMAGE}:latest"
+          docker push "${IMAGE}:latest"
+          printf '### Docker-Image bereit\n\n`%s:%s`\n\nZusätzlich: `%s:latest`\n\nGeprüft: Container-Healthcheck, A/B/C und gemeinsame Assets. Noch kein Server-Deployment.\n' "$IMAGE" "$GITHUB_SHA" "$IMAGE" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Testcontainer entfernen
+        if: always()
+        run: |
+          docker rm -f collection-check || true
+          docker logout ghcr.io || true

@@ -1,0 +1,12 @@
+{
+    admin off
+    auto_https off
+    persist_config off
+}
+:8080 {
+    root * /srv
+    encode gzip
+    respond /healthz "ok" 200
+    header Cache-Control "no-cache"
+    file_server
+}

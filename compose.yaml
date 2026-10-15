@@ -1,0 +1,20 @@
+name: online-collection
+services:
+  web:
+    image: online-collection:${IMAGE_TAG:-local}
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${BIND_IP:?Set BIND_IP to the server interface reachable by Caddy}:${HTTP_PORT:-8088}:8080"
+    read_only: true
+    tmpfs:
+      - /tmp:uid=10001,gid=10001,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
