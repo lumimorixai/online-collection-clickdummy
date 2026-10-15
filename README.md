@@ -26,10 +26,14 @@ Benutzername: `gast` · Passwort: `sammlung2026`. Der Login dient ausschließlic
 - B: `/b/` – Die digitale Galerie: ruhige Gestaltung, große Werke, Serifenschrift.
 - C: `/c/` – Das entdeckende Museum: Fragen, Bildcollagen und Verbindungen als Einstieg.
 
-Alle drei verwenden dieselben Dateien `data.js`, `app.js`, `auth.js` und dieselben Bilder. B und C ergänzen ausschließlich Darstellungsregeln und alternative Einstiegsseiten über `variants.css` und `variants.js`. Die Links innerhalb einer Variante behalten deren Pfad bei; auch Direktlinks, Merkliste und Teilen funktionieren dort. Demo-Zugangsdaten gelten für alle Varianten; Anmeldestatus und Merkliste werden auf derselben Domain gemeinsam genutzt.
+Alle drei verwenden dieselben Dateien `data.js`, `app.js`, `auth.js` und dieselben Bilder. B und C ergänzen eigene Seitenaufbauten und Interaktionen über ihre variantenspezifischen Dateien; `variants.css` und `variants.js` liefern die gemeinsame Variantenbasis. Die Links innerhalb einer Variante behalten deren Pfad bei; auch Direktlinks, Merkliste und Teilen funktionieren dort. Demo-Zugangsdaten gelten für alle Varianten; Anmeldestatus und Merkliste werden auf derselben Domain gemeinsam genutzt.
 
 Nach Änderungen an gemeinsamen Dateien `python3 sync-variants.py` ausführen. Dies aktualisiert die versionierten Dateiverweise für B und C, ohne die Startseite von A zu verändern.
 
 ### Eigenständige Galerie B
 
 Variante B ergänzt mit `b/gallery.js` und `b/gallery.css` eigene Seitenkompositionen für Start, Sammlung mit einklappbaren Filtern, Werkansicht mit großem Bildraum und Informationsdossiers, Geschichtenübersicht, Ausstellungsrundgänge, Merkliste sowie eine vertikale Zeitreise nach Jahrhunderten. Navigation und Anmeldung sind ebenfalls eigenständig gestaltet. Die bestehenden Objekt- und Themendaten sowie Such-, Merk-, Export- und Dialogaktionen werden weiterverwendet. A und C laden diese Dateien nicht.
+
+### Eigenständiges Entdeckungsmuseum C
+
+Variante C ergänzt mit `c/discovery.js` und `c/discovery.css` eigene Seitenaufbauten für Anmeldung, Einstieg, Suche, Objektansicht, Geschichten, Fundstücke, Beziehungsnetz, Zeitreise und Museumsorte. Geschichten führen über einzeln anwählbare Stationen; Objektseiten bieten einen direkten Vergleich zweier Werke. Das Netz zeigt Beziehungen aus gemeinsamen Schlagworten, Personen und Museen und lässt verbundene Objekte zum Mittelpunkt werden. Die Fundstücke heben gemeinsame Themen hervor. Alle 20 Objekte und acht Geschichten bleiben erhalten. A und B laden diese Dateien nicht.

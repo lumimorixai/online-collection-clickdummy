@@ -18,4 +18,7 @@ for design in ('b', 'c'):
     if design == 'b' and (root / 'b/gallery.js').exists():
         html = html.replace('</head>', f'<link rel="stylesheet" href="gallery.css?v={version("b/gallery.css")}"></head>')
         html = html.replace('</body>', f'<script src="gallery.js?v={version("b/gallery.js")}"></script></body>')
+    if design == 'c' and (root / 'c/discovery.js').exists():
+        html = html.replace('</head>', f'<link rel="stylesheet" href="discovery.css?v={version("c/discovery.css")}"></head>')
+        html = html.replace('</body>', f'<script src="discovery.js?v={version("c/discovery.js")}"></script></body>')
     (root / design / 'index.html').write_text(html)
